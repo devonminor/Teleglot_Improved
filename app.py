@@ -54,7 +54,7 @@ import os
 
 import openai
 from dotenv import load_dotenv
-from flask import Flask
+from flask import Flask, request
 from twilio.rest import Client as TwilioClient
 from twilio.twiml.messaging_response import MessagingResponse
 
@@ -88,10 +88,22 @@ def respond(message):
     response.message(message)
     return str(response)
 
+def main_menu():
+    return respond("To learn a word or phrase, text: 'Learn ___.'\n\n" \
+        "To see recommendations on some new words, text 'Suggest'\n\n" \
+        "To hear the word or phrase in Spanish, text 'Speak ___ '.\n\n" \
+        "To be quizzed on the words that you have already learned, text 'Quiz'.\n\n" \
+        "To see the menu options again, text 'Menu'")
+
 
 @app.route("/whatsapp", methods=["POST"])
 def handle_sms():
-    return respond("Hello World!")
+    incoming_message = request.values.get('Body', '').strip()
+    
+    if (incoming_message.lower() == "menu"):
+        return main_menu()
+    else:
+        return main_menu()
 
 
 """
