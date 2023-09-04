@@ -1,4 +1,5 @@
 import os
+from datetime import date
 from enum import Enum
 
 import openai
@@ -41,33 +42,18 @@ def get_user(phone_number):
         return get_user(phone_number)
 
 
-# Write chatgpt code that suggests words to the user based on their profile.
-def prompt_chatgpt_for_recommended_words(phone_number):
-    """
-    Prompts ChatGPT for the 3 recommended words in English that might be useful to learn in Spanish based on a given word or phrase.
-    """
-    # Get the user's profile
-    user = get_user(phone_number)
-
-    name = user.data["name"]
-    location = user.data["location"]
-    age = user.data["age"]
-    proficiency = user.data["proficiency"]
-    interests = user.data["interests"]
-    
-
+def prompt_chatgpt_for_mc_words(wop):
     recommendations = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
             {
-
                 "role": "system",
-                "content": f"{name} is trying to learn Spanish. They are located in {location}, but speak English fluently/natively. They are {age} years old and are a {proficiency} speaker. They are interested in {interests}. Using the prior information about {name}, generate a list of 3 English words that might be useful to learn in Spanish. Do not include the Spanish translation or any description. Separate each word by a comma. Try to make them different each time."
-            },
+                "content": f"Generate a comma separated list of 3 English words that could be confused with the word or phrase '{wop}' because they sound alike, have similar spellings, or have similar but different meanings. Only include the English word. Do not include the Spanish translation or any description, or punctuation. Separate each word by a comma with no numbers."
+            }
         ]
     )
-
-    return recommendations.choices[0].message.content
+    return recommendations.choices[0].message.content.lower()
 
 phone_number = "whatsapp:+18573347982"
-print(prompt_chatgpt_for_recommended_words(phone_number))
+# user = get_user(phone_number)
+print(prompt_chatgpt_for_mc_words("choice"))
