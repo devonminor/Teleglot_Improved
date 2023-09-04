@@ -655,16 +655,6 @@ def handle_sms():
         print("Should see Unrecognized command")
         return respond("Unrecognized command. Please try again or text 'Main Menu' to see the menu options.")
 
-
-"""
-STEPS:
-    1) Respond to the user with a menu with all of the available options
-    2) If this is there first time (meaning we haven't previously collected data about this user). Learn more about the user
-    3) Cipher options and redirect them to the appropriate function
-    4) Use ChatGPT to generate a response
-"""
-
-
 # Start flask app
 if __name__ == "__main__":
     app.run(debug=True)
